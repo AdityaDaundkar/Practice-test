@@ -3,89 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Simple E-Commerce</title>
+  <title>ShopZone - Online Shopping</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
 
-    h1 { text-align: center; margin-bottom: 20px; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e0e0e0);
+      color: #333;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #222;
+      font-size: 2.5rem;
+    }
 
     .products {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
     }
 
     .product {
       background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .product:hover {
+      transform: scale(1.03);
     }
 
     .product img {
       width: 100%;
-      max-height: 150px;
-      object-fit: contain;
-    }
-
-    .product h3 { margin: 10px 0; }
-
-    .product button {
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .cart {
-      margin-top: 40px;
-      background: white;
-      padding: 20px;
+      height: 180px;
+      object-fit: cover;
       border-radius: 10px;
     }
 
+    .product h3 {
+      margin: 15px 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .product p {
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    .product button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .product button:hover {
+      background: #0056b3;
+    }
+
+    .cart {
+      margin-top: 50px;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
     .cart h2 {
-      margin-bottom: 10px;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
     }
 
     .cart-item {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       border-bottom: 1px solid #ddd;
       padding: 10px 0;
     }
 
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
     .cart-total {
       text-align: right;
+      font-size: 1.2rem;
       font-weight: bold;
-      margin-top: 10px;
+      margin-top: 15px;
+      color: #007bff;
+    }
+
+    @media (max-width: 600px) {
+      .product img {
+        height: 150px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>Online Shopping</h1>
+  <h1>🛒 Welcome to ShopZone</h1>
 
   <div class="products" id="product-list">
-    <!-- Products will be injected here -->
+    <!-- Products will appear here -->
   </div>
 
   <div class="cart">
-    <h2>Cart</h2>
+    <h2>Your Cart</h2>
     <div id="cart-items"></div>
     <div class="cart-total" id="cart-total">Total: ₹0</div>
   </div>
 
   <script>
     const products = [
-      { id: 1, name: "T-Shirt", price: 499, image: "https://images.unsplash.com/photo-1585386959984-a4155223f7e1?auto=format&fit=crop&w=400&q=80" },
-      { id: 2, name: "Sneakers", price: 1299, image: "https://images.unsplash.com/photo-1618354691373-d851371b7e8d?auto=format&fit=crop&w=400&q=80" },
-      { id: 3, name: "Backpack", price: 899, image: "https://images.unsplash.com/photo-1600185365483-26d7a4f1d7fc?auto=format&fit=crop&w=400&q=80" },
-      { id: 4, name: "Watch", price: 1599, image: "https://images.unsplash.com/photo-1602535549371-1fd8c2eeb36a?auto=format&fit=crop&w=400&q=80" }
+      { id: 1, name: "T-Shirt", price: 499, image: "https://images.unsplash.com/photo-1585386959984-a4155223f7e1?auto=format&fit=crop&w=600&q=80" },
+      { id: 2, name: "Sneakers", price: 1299, image: "https://images.unsplash.com/photo-1618354691373-d851371b7e8d?auto=format&fit=crop&w=600&q=80" },
+      { id: 3, name: "Backpack", price: 899, image: "https://images.unsplash.com/photo-1600185365483-26d7a4f1d7fc?auto=format&fit=crop&w=600&q=80" },
+      { id: 4, name: "Watch", price: 1599, image: "https://images.unsplash.com/photo-1602535549371-1fd8c2eeb36a?auto=format&fit=crop&w=600&q=80" }
     ];
 
     let cart = [];
@@ -94,7 +140,6 @@
     const cartItems = document.getElementById("cart-items");
     const cartTotal = document.getElementById("cart-total");
 
-    // Display products
     function renderProducts() {
       productList.innerHTML = "";
       products.forEach(product => {
@@ -110,7 +155,6 @@
       });
     }
 
-    // Add to cart
     function addToCart(id) {
       const product = products.find(p => p.id === id);
       const existing = cart.find(item => item.id === id);
@@ -122,7 +166,6 @@
       updateCart();
     }
 
-    // Update cart display
     function updateCart() {
       cartItems.innerHTML = "";
       let total = 0;
